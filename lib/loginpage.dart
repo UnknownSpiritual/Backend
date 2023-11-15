@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uts_2/registerpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uts_2/screen/news_screen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -61,8 +62,10 @@ class _LoginPageState extends State<LoginPage> {
             // CircleAvatar untuk menampilkan gambar dari URL
             const CircleAvatar(
               radius: 75,
-              backgroundColor: Colors.grey, // Ganti dengan warna atau gambar yang diinginkan
-              backgroundImage: NetworkImage('https://media.istockphoto.com/id/860586342/id/vektor/ilustrasi-vektor-kartun-konsep-breaking-news-koresponden-dengan-mikrofon-reporter-berita.jpg?s=1024x1024&w=is&k=20&c=vdyx76y7UWBxp-mHwkvqqofMkuYr1MQFtvt9bfCMW4U='),
+              backgroundColor:
+                  Colors.grey, // Ganti dengan warna atau gambar yang diinginkan
+              backgroundImage: NetworkImage(
+                  'https://media.istockphoto.com/id/860586342/id/vektor/ilustrasi-vektor-kartun-konsep-breaking-news-koresponden-dengan-mikrofon-reporter-berita.jpg?s=1024x1024&w=is&k=20&c=vdyx76y7UWBxp-mHwkvqqofMkuYr1MQFtvt9bfCMW4U='),
             ),
             const SizedBox(height: 20),
 
@@ -82,7 +85,8 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _usernameController,
                 onChanged: (value) => _saveValues(),
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   border: OutlineInputBorder(),
                   hintText: 'Masukkan username',
                 ),
@@ -106,10 +110,13 @@ class _LoginPageState extends State<LoginPage> {
                 onChanged: (value) => _saveValues(),
                 obscureText: true,
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   border: const OutlineInputBorder(),
                   hintText: 'Masukkan password (min. 8 karakter)',
-                  errorText: _isPasswordValid() ? null : 'Password harus lebih dari 8 karakter',
+                  errorText: _isPasswordValid()
+                      ? null
+                      : 'Password harus lebih dari 8 karakter',
                 ),
               ),
             ),
@@ -140,6 +147,12 @@ class _LoginPageState extends State<LoginPage> {
                 if (_isPasswordValid() && _isChecked) {
                   // Simpan username dan password saat login berhasil
                   _saveValues();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsScreen(),
+                      ),
+                    );
                 } else {
                   // Tampilkan pesan kesalahan jika password tidak valid atau checkbox belum dicentang
                   String errorMessage = '';
@@ -149,23 +162,25 @@ class _LoginPageState extends State<LoginPage> {
                   if (!_isChecked) {
                     errorMessage += '\nCheckbox harus dicentang.';
                   }
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Error"),
-                        content: Text(errorMessage),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text("OK"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  if (errorMessage != '') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Error"),
+                          content: Text(errorMessage),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("OK"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 }
               },
               child: const Text("Login"),
@@ -188,4 +203,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
